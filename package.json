@@ -1,0 +1,16 @@
+{
+  "name": "webd6201-ICE1",
+  "version": "1.22.10",
+  "description": "This is my submission for WEBD 6201 ICE 1, Adapted from Tom Tsiliopoulos",
+  "main": "app.js",
+  "repository": "https://github.com/durhamprogrammer/WEBD6201-W2021-ICE1a.git",
+  "author": "Emeka Okoisama <emeka.okoisama@dcmail.ca>",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
+    "@popperjs/core": "^2.6.0",
+    "boostrap": "^2.0.0",
+    "bootstrap": "^5.0.0-beta1",
+    "jquery": "^3.5.1"
+  }
+}
