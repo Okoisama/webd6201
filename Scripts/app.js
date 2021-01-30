@@ -1,109 +1,169 @@
-/* custom JavaScript goes here*/
+/* custom JavaScript goes here */
 
-const { start } = require("@popperjs/core");
+//IIFE - Immediately Invoked Function Expression
+//AKA - Anonymous Self-Executing Function
+//Closure - limits scope leak
+
+"use strict";
 
 (function()
 {
-    "use strict";
+    function displayHome()
+    {
+        let paragraphOneText =
+          "This is a simple site to demonstrate DOM Manipulation for ICE 1";
 
-function displayHomePage()
-{
-    let paragraphOneContent = "This is my first paragraph";
+        let paragraphOneElement = document.getElementById("paragraphOne");
 
-    // selection
-    let paragraphOne = document.getElementById("paragraphOne");
-    paragraphOne.textContent = paragraphOneContent;
+        paragraphOneElement.textContent = paragraphOneText;
+        paragraphOneElement.className = "fs-5";
 
-    // STEP 1 - Create a new Element
-    let paragraphTwo = document.createElement("p");
-    // STEP 2 - configure the new Element
-    paragraphTwo.setAttribute("id", "paragraphTwo");
-    paragraphTwo.textContent = "This is my second paragraph";
-    paragraphTwo.className = "fs-4 fw-bold";
-    // STEP 3 - Target the Parent Element
-    let mainContent = document.querySelector("main");
-    // STEP 4 - append the new element to the parent
-    mainContent.appendChild(paragraphTwo);
+        // Step 1. document.createElement
+        let newParagraph = document.createElement("p");
+        // Step 2. configure the element
+        newParagraph.setAttribute("id", "paragraphTwo");
+        newParagraph.textContent = "...And this is paragraph two";
+        // Step 3. select the parent element
+        let mainContent = document.getElementsByTagName("main")[0];
+        // Step 4. Add / Insert the element
+        mainContent.appendChild(newParagraph);
 
-    let newDivTag = document.createElement("div");
-    newDivTag.innerHTML = 
-    `<h2>This is my second heading</h2>
-    <p id="paragraphThree"> This is the Third Paragraph </p>`;
+        newParagraph.className = "fs-6";
 
-    mainContent.append(newDivTag);
-    
-}
+        // another way of injecting content
+        let paragraphDiv = document.createElement("div");
+        let paragraphThree = `<p id="paragraphThree" class="fs-7 fw-bold">And this is the Third Paragraph</p>`;
+        paragraphDiv.innerHTML = paragraphThree;
 
-function displayAboutPage()
-{
+        // insertions
 
-}
+        // example of inserting before a node
+        //newParagraph.before(paragraphDiv);
 
+        // example of inserting after a node
+        newParagraph.after(paragraphDiv);
 
-function displayContactPage()
-{
-    let sendButton = document.querySelector("button#sendButton");
+        // deletions
 
+        // example of removing a single element
+        //paragraphOneElement.remove();
+
+        // example of removeChild
+        mainContent.removeChild(paragraphOneElement);
+
+        // update / modification
+        //mainContent.firstElementChild.textContent = "Welcome Home!";
+
+        mainContent.innerHTML = `<h1 id="firstHeading">Welcome to WEBD6201 - Lab 1</h1>
+         <p id="paragraphOne" class="fs-3 fw-bold">This is my first Paragraph</p>
+        `;
+        
+    }
+
+    function displayAbout()
+    {
+
+    }
+
+    function displayProjects()
+    {
+
+    }
+
+    function displayServices()
+    {
+
+    }
+
+    function displayContact()
+    {
+        let messageArea = document.getElementById("messageArea");
+        messageArea.hidden = true;
+
+        // form validation
         let fullName = document.getElementById("fullName");
-        fullName.addEventListener("blur", function(event)
-        {
+        fullName.addEventListener("blur", function() {
             if(fullName.value.length < 2)
             {
                 fullName.focus();
                 fullName.select();
-                
+                messageArea.hidden = false;
+                messageArea.className = "alert alert-danger";
+                messageArea.textContent = "Please enter an appropriate Name";
+            }
+            else
+            {
+                messageArea.removeAttribute("class");
+                messageArea.hidden = true;
             }
         });
 
-        sendButton.addEventListener("click", function(event)
-         {
-            event.preventDefault();
+        let sendButton = document.getElementById("sendButton");
+        sendButton.addEventListener("click", function(event){
+            //event.preventDefault();
 
-            console.log(fullName.value);
-            console.log(contactNumber.value);
-            console.log(emailAddress.value);
+            let contact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
+
+            localStorage.setItem((localStorage.length + 1).toString(), contact.serialize());
         });
+    }
 
-}
-
-
-function displayProductsPage()
-{
-
-}
-
-
-function displayServicesPage()
-{
-
-}
+    function displayContactList()
+    {
+        let contactList = document.getElementById("contactList");
+        let data = "";
+        
+        for (let index = 1; index < localStorage.length + 1; index++) 
+        {
+          console.log("sdfd");
+          
+          let serializedContact = localStorage.getItem(index.toString());
+          console.log(localStorage.length);
+          let contact = new Contact();
+          if(serializedContact){
+          contact.deserialize(serializedContact);
+          data += `<tr>
+          <th scope="row">${index}</th>
+          <td>${contact.fullName}</td>
+          <td>${contact.contactNumber}</td>
+          <td>${contact.emailAddress}</td>
+        </tr>`
+          }
+          
+        }
+        contactList.innerHTML = data;
+      
+    }
 
     function Start()
     {
         console.log("App Started...");
 
-        switch(document.title)
+        switch (document.title) 
         {
-            case 'Home':
-                displayHomePage();
-                break;
-            case 'About':
-                displayAboutPage();
-                break;
-            case 'Products':
-                displayProductsPage();
-                break;
-            case 'Services':
-                displayServicesPage();
-                break;
-            case 'Contact':
-                displayContactPage();
-                break;
+          case "Home":
+              displayHome();
+            break;
+          case "About":
+              displayAbout();
+            break;
+          case "Projects":
+              displayProjects();
+            break;
+          case "Services":
+              displayServices();
+            break;
+          case "Contact":
+              displayContact();
+            break;
+          case "Contact-List":
+              displayContactList();
+            break;
         }
         
     }
 
-window.addEventListener("load", start);
-})
+    window.addEventListener("load", Start);
 
-();
+})();
+
