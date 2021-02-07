@@ -4,9 +4,9 @@
 //AKA - Anonymous Self-Executing Function
 //Closure - limits scope leak
 
+// created a core namespace
 "use strict";
-
-(function()
+(function(core)
 {
     function displayHome()
     {
@@ -77,63 +77,85 @@
 
     function displayContact()
     {
-        let messageArea = document.getElementById("messageArea");
-        messageArea.hidden = true;
+        $("#messageArea").hide();
 
         // form validation
-        let fullName = document.getElementById("fullName");
-        fullName.addEventListener("blur", function() {
-            if(fullName.value.length < 2)
-            {
-                fullName.focus();
-                fullName.select();
-                messageArea.hidden = false;
-                messageArea.className = "alert alert-danger";
-                messageArea.textContent = "Please enter an appropriate Name";
-            }
-            else
-            {
-                messageArea.removeAttribute("class");
-                messageArea.hidden = true;
-            }
-        });
 
-        let sendButton = document.getElementById("sendButton");
-        sendButton.addEventListener("click", function(event){
-            //event.preventDefault();
-
-            let contact = new Contact(fullName.value, contactNumber.value, emailAddress.value);
-
-            localStorage.setItem((localStorage.length + 1).toString(), contact.serialize());
-        });
-    }
-
-    function displayContactList()
-    {
-        let contactList = document.getElementById("contactList");
-        let data = "";
-        
-        for (let index = 1; index < localStorage.length + 1; index++) 
+        $("#fullName").on("blur", function()
         {
-          console.log("sdfd");
-          
-          let serializedContact = localStorage.getItem(index.toString());
-          console.log(localStorage.length);
-          let contact = new Contact();
-          if(serializedContact){
-          contact.deserialize(serializedContact);
-          data += `<tr>
-          <th scope="row">${index}</th>
-          <td>${contact.fullName}</td>
-          <td>${contact.contactNumber}</td>
-          <td>${contact.emailAddress}</td>
-        </tr>`
+          if($(this).val().length < 2)
+          {
+              $(this).trigger("focus").trigger("select");
+              $("#messageArea").show().addClass("alert alert-danger").text("Please enter an appropriate Name");
           }
-          
+          else
+          {
+             $("#messageArea").removeAttr("class").hide();
+          }
+        });
+
+
+        $("#sendButton").on("click", (event)=>
+        {
+          if($("#subscribeCheckbox")[0].checked)
+          {
+          let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
+
+          if(contact.serialize())
+          {
+            localStorage.setItem((localStorage.length + 1).toString(), contact.serialize());
+          }
         }
-        contactList.innerHTML = data;
-      
+        });
     }
+
+    function displayContactList() 
+    {
+      if (localStorage.length > 0) 
+      {
+        let data = "";
+
+        for (let index = 0; index < localStorage.length; index++) 
+        {
+          let contactData = localStorage.getItem((index + 1).toString());
+
+          let contact = new core.Contact();
+          contact.deserialize(contactData);
+
+          data += `<tr>
+          <th scope="row">${index + 1}</th>
+          <td>${contact.FullName}</td>
+          <td>${contact.ContactNumber}</td>
+          <td>${contact.EmailAddress}</td>
+          <td class="text-center"><button value"${index + 1}" class="btn btn-primary btn-sm edit"><i class="fas fa-edit fa-sm"></i> Edit</button></td>
+          <td class="text-center"><button value"${index + 1}" class="btn btn-danger btn-sm delete"><i class="fas fa-trash-alt fa-sm"></i> Delete</button></td> 
+        </tr>`;
+
+
+        }
+        
+        contactList.innerHTML = data;
+
+        $("button.edit").on("click", function()
+        {
+          console.log($(this).val());
+        });
+
+        $("button.delete").on("click", function()
+        {
+          if(confirm("Are you sure?"))
+          {
+            localStorage.removeItem($(this).val())
+            location.href = "contact-list.html";    //refreshes the page
+          }
+        });
+
+
+        //$("#contactList").html(data);
+      }
+    }
+
+     
 
     function Start()
     {
@@ -157,13 +179,12 @@
               displayContact();
             break;
           case "Contact-List":
-              displayContactList();
-            break;
+            displayContactList();
+          break;
         }
         
     }
 
     window.addEventListener("load", Start);
 
-})();
-
+})(core || (core = {}));
