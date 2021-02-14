@@ -1,9 +1,10 @@
+  
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
+    <title>Edit</title>
     <!-- CSS Section -->
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
@@ -38,7 +39,7 @@
                   </li>
 
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="contact.html"><i class="fas fa-phone fa-lg"></i> Contact Us</a>
+                    <a class="nav-link" aria-current="page" href="contact.html"><i class="fas fa-phone fa-lg"></i> Contact Us</a>
                   </li>
                 </ul>
               </div>
@@ -48,7 +49,7 @@
 
     <!-- Main Content -->
     <main class="container">
-        <h1>Contact Us</h1>
+        <h1>Edit Contact</h1>
         <div id="messageArea"></div>
 
         <div class="row justify-content-lg-center g-3">
@@ -72,18 +73,10 @@
               name="emailAddress" required>
             </div>
 
-            <div class="form-check mb-3">
-              <input id="subscribeCheckbox" type="checkbox" class="form-check-input" value="" name="subscribeCheckbox">
-              <label class="form-check-label" for="subscribeCheckbox"> Subscribe to our contact list</label>
-            </div>
-  
-            <button id="sendButton" type="submit" class="btn btn-primary"><i class="fas fa-envelope fa-lg"></i> Send</button>
-            <button id="cancelButton" type="reset" class="btn btn-warning"><i class="fas fa-undo fa-lg"></i> Cancel</button>
-          </form>
 
-          <div class="col-lg-3 col-md-3">
-            <a href="contact-list.html" class="btn btn-primary btn-lg"><i class="fas fa-users fa-lg"></i> Show Contact List</a>
-          </div>
+            <button id="editButton" type="button" class="btn btn-primary"><i class="fas fa-edit fa-lg"></i> Edit</button>
+            <button id="cancelButton" type="button" class="btn btn-warning"><i class="fas fa-undo fa-lg"></i> Cancel</button>
+          </form>
         </div>
         
 
