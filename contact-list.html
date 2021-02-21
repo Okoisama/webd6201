@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="./Content/app.css">
+
+    <!-- Check to see if user is logged in-->
+    <script src="./Scripts/authguard.js"></script>
 </head>
 <body>
     <!-- Main Header -->
@@ -39,6 +42,10 @@
 
                   <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="contact.html"><i class="fas fa-phone fa-lg"></i> Contact Us</a>
+                  </li>
+
+                  <li id="login" class="nav-item">
+                    <a class="nav-link" aria-current="page" href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
                   </li>
                 </ul>
               </div>
@@ -90,5 +97,6 @@
     <script src="./Scripts/namespace.js"></script>
     <script src="./Scripts/contact.js"></script>
     <script src="./Scripts/app.js"></script>
+    <script src="./Scripts/user.js"></script>
 </body>
 </html>

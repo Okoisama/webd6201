@@ -86,7 +86,7 @@
         if(!fullNamePattern.test($(this).val()))
         {
           $(this).trigger("focus").trigger("select");
-          messageArea.show().addClass("alert alert-danger").text("Please enter an appropriate Name. A first name and last name are required with a minimum length of 2 characters each.");
+          messageArea.show().addClass("alert alert-danger").text("Please enter an appropriate name. A first name and last name are required with a minimum length of 2 characters each.");
         }
         else
         {
@@ -152,7 +152,7 @@
           if($(this).val().length < 2)
           {
               $(this).trigger("focus").trigger("select");
-              $("#messageArea").show().addClass("alert alert-danger").text("Please enter an appropriate Name");
+              $("#messageArea").show().addClass("alert alert-danger").text("Please enter an appropriate name");
           }
           else
           {
@@ -177,14 +177,18 @@
 
     function displayContactList() 
     {
+
       if (localStorage.length > 0) 
       {
         let contactList = document.getElementById("contactList");
 
         let data = "";
+
+        let keys = Object.keys(localStorage);
+
         let index = 1; // sentinel variable
         // returns an array of keys from localStorage
-        let keys = Object.keys(localStorage);
+        
         for (const key of keys) {
           let contactData = localStorage.getItem(key);
 
@@ -286,14 +290,91 @@
     }
 
 
-      function displayLogin()
+    function displayLogin()
     {
+      let messageArea = $("#messageArea");
+      messageArea.hide();
 
+      $("#loginButton").on("click", function() 
+      {
+        let username = $("#username");
+        let password = $("#password");
+        let success = false;
+        let newUser = new core.User();
+
+        // use ajax to access the json file
+        $.get("./Data/users.json", function(data)
+        {
+          // check each user in the users.json file  (linear search)
+          for (const user of data.users) 
+          {
+            if(username.val() == user.Username && password.val() == user.Password)
+            {
+              newUser.fromJSON(user);
+              success = true;
+              break;
+            }
+          }
+
+          // if username and password matches - success... then perform login
+          if(success)
+          {
+            // add user to session storage
+            sessionStorage.setItem("user", newUser.serialize());
+
+            // hide any error message
+            messageArea.removeAttr("class").hide();
+
+            // redirect user to secure area - contact-list.html
+            location.href = "contact-list.html";
+          }
+          else
+          {
+            // display an error message
+            username.trigger("focus").trigger("select");
+            messageArea.show().addClass("alert alert-danger").text("Error: Invalid login information");
+          }
+        });
+      });
+
+      $("#cancelButton").on("click", function()
+      {
+        // clear the login form
+        document.forms[0].reset();
+        // return to the home page
+        location.href = "index.html";
+      });
     }
 
     function displayRegister()
     {
 
+    }
+
+    function toggleLogin()
+    {
+      // if user is logged in
+      if(sessionStorage.getItem("user"))
+      {
+        // swap out the login link for logout
+        $("#login").html(
+        `<a id="logout" class="nav-link" aria-current="page" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
+        );
+
+        $("#logout").on("click", function()
+        {
+          // perform logout
+          sessionStorage.clear();
+
+          // redirect back to login
+          location.href = "login.html";
+        });
+       
+        $(`<li class="nav-item">
+        <a id="contactListLink" class="nav-link" aria-current="page" href="contact-list.html"><i class="fas fa-users fa-lg"></i> Contact List</a>
+      </li>`).insertBefore("#login");
+      
+      }
     }
 
     function Start()
@@ -331,6 +412,8 @@
           break;
         }
         
+        // toggle login/logout
+       toggleLogin();
     }
 
     window.addEventListener("load", Start);
