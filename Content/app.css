@@ -1,5 +1,4 @@
 /* custom css goes here */
-
 .input-group-addon:first-child
 {
     border-right: 0;
@@ -26,7 +25,6 @@
     position:relative;
     z-index: 2;
     float:left;
-    width: 100%;
     margin-bottom: 0;
 }
 
